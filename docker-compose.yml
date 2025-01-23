@@ -1,0 +1,58 @@
+services:
+  web:
+    environment:
+      - ENV_TYPE=production
+    platform: linux/amd64
+    build: .
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+
+  localweb:
+    environment:
+      - ENV_TYPE=development
+    platform: linux/arm64
+    stdin_open: true
+    tty: true
+    build: .
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4  # lts
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mydatabase
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=mypassword
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  tests:
+    build:
+      context: .
+      args:
+        MODE: dev
+    platform: linux/arm64
+    security_opt:
+      - seccomp:unconfined  # for strace
+    environment:
+      - ENV_TYPE=development.unittest
+    volumes:
+      - ./.bash_history:/root/.bash_history
+      - ./:/workdir
+
+    command: py.test /wallet_api/
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:

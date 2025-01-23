@@ -1,0 +1,10 @@
+python3-dev
+gettext
+sudo
+bash
+mysql-client
+vim
+musl
+musl-locales
+build-base
+linux-headers
