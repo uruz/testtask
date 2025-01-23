@@ -8,3 +8,4 @@ musl
 musl-locales
 build-base
 linux-headers
+mariadb-connector-c-dev

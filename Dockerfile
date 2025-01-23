@@ -11,6 +11,7 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 RUN cp /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN echo 'export LC_ALL=en_GB.UTF-8' >> /etc/profile.d/locale.sh && \
   sed -i 's|LANG=C.UTF-8|LANG=en_GB.UTF-8|' /etc/profile.d/locale.sh
+RUN adduser -D -S -G www-data www-data
 
 COPY requirements/alpine /requirements/alpine
 
@@ -28,10 +29,10 @@ COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 COPY setup.py MANIFEST.in pytest.ini /workdir/
+COPY wallet_api/ /workdir/wallet_api/
 
 COPY uwsgi.ini /workdir/
 
-COPY wallet_api/ /workdir/walle_api/
 
 RUN pip3 install -e /workdir/ --break-system-packages
 EXPOSE 8000
