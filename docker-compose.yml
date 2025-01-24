@@ -35,7 +35,7 @@ services:
       - MYSQL_ROOT_PASSWORD=rootpassword
     ports:
       - "3306:3306"
-    command: --mysql-native-password=ON --skip-ssl=ON
+    command: --mysql-native-password=ON --skip-ssl=ON --disable-log-bin
 
   tests:
     build:

@@ -38,6 +38,7 @@ def wallets3():
     for i in range(1, 4):
         # 3 transactions, max=60
         w2.transactions.create(txid=f'W2_TX{i}', amount=i * 20.00)
+    w3.transactions.create(txid=f'W3_TX', amount=500)
     for i in range(1, 6):
         # 5 transactions with negative balance, min=150
         w3.transactions.create(txid=f'W3_TX{i}', amount=i * -30.00)

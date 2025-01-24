@@ -19,7 +19,7 @@ class Wallet(models.Model):
 
 
 class Transaction(models.Model):
-    wallet_id = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name='transactions')
+    wallet = models.ForeignKey(Wallet, on_delete=models.PROTECT, related_name='transactions')
     txid = models.CharField(null=False, blank=False, max_length=255, unique=True)
     amount = models.DecimalField(max_digits=MAXDIGITS, decimal_places=DECIMAL_PLACES, db_index=True)
 
