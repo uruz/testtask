@@ -5,6 +5,7 @@ from rest_framework_json_api.views import ReadOnlyModelViewSet
 from wallet_api.apicore.models import Wallet, Transaction
 from wallet_api.apicore.serializers import WalletSerializer, TransactionSerializer
 
+
 def ping(HttpRequest):
     return HttpResponse(content='200 OK!', status=200)
 
@@ -26,7 +27,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         'amount': ['gt', 'gte', 'lt', 'lte'],
     }
 
-    @action(detail=False, url_path='by-txid/(?P<txid>\w+)', url_name='by-trxid')
+    @action(detail=False, url_path=r'by-txid/(?P<txid>\w+)', url_name='by-trxid')
     def by_trxid(self, request, txid):
         trx = Transaction.objects.get(txid=txid)
         serializer = self.get_serializer(trx)

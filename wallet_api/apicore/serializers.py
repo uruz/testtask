@@ -1,6 +1,7 @@
 from rest_framework_json_api import serializers
 from wallet_api.apicore.models import Wallet, Transaction
 
+
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet

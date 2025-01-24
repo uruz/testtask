@@ -1,7 +1,7 @@
 import pytest
 
-pytestmark = pytest.mark.django_db
 from wallet_api.apicore.models import Wallet, Transaction
+pytestmark = pytest.mark.django_db
 
 
 def test_transcation_endpoint(client, one_transaction):

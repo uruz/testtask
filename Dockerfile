@@ -28,7 +28,7 @@ RUN pip3 install uwsgi
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-COPY setup.py MANIFEST.in pytest.ini /workdir/
+COPY setup.py setup.cfg MANIFEST.in pytest.ini /workdir/
 COPY wallet_api/ /workdir/wallet_api/
 
 COPY uwsgi.ini /workdir/
