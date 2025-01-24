@@ -13,6 +13,10 @@ djangorestframework-jsonapi = "^7.1.0"
 pytest = "^8.3.4"
 pytest-django = "^4.9.0"
 mysqlclient = "^2.2.7"
+uritemplate = "^4.1.1"
+ipdb = "^0.13.13"
+pyyaml = "^6.0.2"
+django-filter = "^24.3"
 
 [build-system]
 requires = ["poetry-core"]

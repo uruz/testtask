@@ -1,8 +1,9 @@
--- Изменяем аутентификацию для root пользователя
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpassword';
 
--- Изменяем аутентификацию для нашего пользователя
 ALTER USER 'myuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mypassword';
 
--- Применяем изменения
+GRANT CREATE ON *.* TO 'myuser'@'%';
+GRANT ALL PRIVILEGES ON `mydatabase`.* TO 'myuser'@'%';
+GRANT ALL PRIVILEGES ON `test_mydatabase`.* TO 'myuser'@'%';
+
 FLUSH PRIVILEGES;
