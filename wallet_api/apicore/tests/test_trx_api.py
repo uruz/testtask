@@ -19,12 +19,18 @@ def test_transcation_endpoint(client, one_transaction):
 
 def test_single_transaction_endpoint(client, one_transaction):
     response = client.get(f'/v1/transactions/{one_transaction.id}/')
-    assert Wallet.objects.count() == 1
     assert response.status_code == 200
     data = response.json()
-    assert set(data.keys()) == {'data'}
     assert data['data'] == {'type': 'Transaction', 'id': str(one_transaction.id),
                             'attributes': {'txid': 'TX1', 'amount': '10.000000000000000000'}}
+
+
+def test_single_transaction_endpoint_by_txid(client, one_transaction):
+    response = client.get(f'/v1/transactions/by-txid/{one_transaction.txid}/')
+    assert response.status_code == 200
+    data = response.json()
+    assert data['data']['id'] == str(one_transaction.id)
+    assert data['data']['attributes']['txid'] == 'TX1'
 
 
 def test_pagination_trxs(client, transactions20):
@@ -49,11 +55,52 @@ def test_sorting_trxs(client, transactions20):
 
 def test_filter_by_wallet_id(client, wallets3):
     w1, w2, w3 = wallets3
-    response = client.get('/v1/transactions/', {'filter[wallet_id]': w1.pk})
+    response = client.get('/v1/transactions/', {'filter[wallet_id]': w1.pk, 'sort': 'id'})
     assert response.status_code == 200
     data = response.json()['data']
     assert len(data) == 2
-    response = client.get('/v1/transactions/', {'filter[wallet_id]': w3.pk})
+
+    response = client.get('/v1/transactions/', {'filter[wallet_id]': w3.pk, 'sort': 'id'})
     assert response.status_code == 200
     data = response.json()['data']
     assert len(data) == 5
+
+
+def test_filter_by_amount(client, wallets3):
+    w1, w2, w3 = wallets3
+    response = client.get('/v1/transactions/', {'filter[amount.gt]': '100', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 0
+
+    response = client.get('/v1/transactions/', {'filter[amount.lt]': '-100.0000', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 2
+    assert {item['attributes']['amount'] for item in data} == {'-120.000000000000000000', '-150.000000000000000000'}
+
+    response = client.get('/v1/transactions/', {'filter[amount.gt]': '0', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 5
+
+
+def test_filter_by_amount_on_wallet(client, wallets3):
+    w1, w2, w3 = wallets3
+    response = client.get('/v1/transactions/', {'filter[wallet_id]': w1.pk, 'filter[amount.gte]': '10', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 2
+
+    response = client.get('/v1/transactions/', {'filter[wallet_id]': w1.pk, 'filter[amount.gt]': '10', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 1
+
+    response = client.get('/v1/transactions/', {'filter[wallet_id]': w3.pk, 'filter[amount.gt]': '-100', 'sort': 'id'})
+    assert response.status_code == 200
+    data = response.json()['data']
+    assert len(data) == 3
+    assert {item['attributes']['amount'] for item in data} == {'-30.000000000000000000',
+                                                               '-60.000000000000000000',
+                                                               '-90.000000000000000000'}

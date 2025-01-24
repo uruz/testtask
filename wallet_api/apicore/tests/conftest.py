@@ -32,10 +32,13 @@ def one_transaction(default_wallet):
 @pytest.fixture
 def wallets3():
     w1, w2, w3 = (Wallet.objects.create(label=f'Test wallet {i}', balance=i * 10.00) for i in range(3))
-    for i in range(2):
+    for i in range(1, 3):
+        # 2 transactions, max=20
         w1.transactions.create(txid=f'W1_TX{i}', amount=i * 10.00)
-    for i in range(3):
+    for i in range(1, 4):
+        # 3 transactions, max=60
         w2.transactions.create(txid=f'W2_TX{i}', amount=i * 20.00)
-    for i in range(5):
+    for i in range(1, 6):
+        # 5 transactions with negative balance, min=150
         w3.transactions.create(txid=f'W3_TX{i}', amount=i * -30.00)
     return w1, w2, w3
