@@ -51,7 +51,10 @@ services:
       - ./.bash_history:/root/.bash_history
       - ./:/workdir
 
-    command: py.test /wallet_api/
+    command: >
+      bash -c "
+      cd /workdir/ && flake8 &&
+      cd /workdir/wallet_api/ && py.test"
     depends_on:
       - db
 
