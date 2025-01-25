@@ -10,9 +10,10 @@ I haven't prepared the fake data, so the `web` docker services would be run empt
 
 # Quick start
 `docker compose build`
-`docker compose up db -d`
 `docker compose up web`
+The API is available at http://localhost:8000/
 
 # Run tests
-`docker build tests`
-`docker run tests`
+`docker compose build tests`
+`docker compose run tests`
+
