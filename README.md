@@ -9,11 +9,15 @@ migrations.
 I haven't prepared the fake data, so the `web` docker services would be run empty.
 
 # Quick start
-`docker compose build`
-`docker compose up web`
+```
+docker compose build
+docker compose up web
+```
 The API is available at http://localhost:8000/
 
 # Run tests
-`docker compose build tests`
-`docker compose run tests`
+```
+docker compose build tests
+docker compose run tests
+```
 
